@@ -40,11 +40,7 @@ io.on("connection", (client) => {
   consumer.on("message", function (message) {
     client.emit("request", message.value);
     if (message.value != null) {
-      var chrt = JSON.parse(message.value);
-      var charts = JSON.parse(chrt.payload.after);
-      if (charts != null) {
-        dataUpdate();
-      }
+      dataUpdate();
     }
   });
 
