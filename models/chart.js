@@ -26,5 +26,5 @@ var user = new Schema({
     type: Number,
   },
 });
-var user = mongoose.model("users", user);
-module.exports = user;
+var users = mongoose.model("users", user);
+module.exports = users;
