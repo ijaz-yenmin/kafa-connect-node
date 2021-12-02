@@ -24,7 +24,7 @@ var Consumer = kafka.Consumer,
     client,
     [{ topic: "mongo1.testdb.users", partition: 0 }],
     {
-      autoCommit: false,
+      autoCommit: true,
     }
   );
 
