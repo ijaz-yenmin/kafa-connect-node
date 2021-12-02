@@ -56,6 +56,8 @@ io.on("connection", (client) => {
 async function dataUpdate() {
   console.log("Socket Emmit");
   var charts = await users.find({});
+  console.log(charts);
+  console.log(charts.length);
   for (let socketMapObj of socketMap) {
     if (charts.length > 0) {
       socketMapObj.emit("dataUpdate", [
