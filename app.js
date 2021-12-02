@@ -12,7 +12,7 @@ var async = require("async");
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.json());
-mongoose.connect("mongodb://localhost/chartdb", {
+mongoose.connect("mongodb://34.93.71.234:27017/testdb?replicaSet=rs0", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
