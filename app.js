@@ -32,17 +32,18 @@ http.listen(3000, () => {
   console.log("listning to port 3000");
 });
 
+consumer.on("message", function (message) {
+  client.emit("request", message.value);
+  if (message.value != null) {
+    dataUpdate();
+  }
+});
+
 var socketMap = [];
 
 io.on("connection", (client) => {
   console.log("Connected", client);
   socketMap.push(client);
-  consumer.on("message", function (message) {
-    client.emit("request", message.value);
-    if (message.value != null) {
-      dataUpdate();
-    }
-  });
 
   client.on("disconnect", () => {
     console.log("Client disconnected");
