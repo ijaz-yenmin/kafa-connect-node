@@ -55,7 +55,37 @@ io.on("connection", (client) => {
 
 async function dataUpdate() {
   console.log("Socket Emmit");
-  var charts = await users.find({});
+  var charts = await users.aggregate([
+    {
+      $group: {
+        _id: "null",
+        january: {
+          $sum: "$january",
+        },
+        february: {
+          $sum: "$february",
+        },
+        march: {
+          $sum: "$march",
+        },
+        april: {
+          $sum: "$april",
+        },
+        may: {
+          $sum: "$may",
+        },
+        june: {
+          $sum: "$june",
+        },
+        july: {
+          $sum: "$july",
+        },
+        august: {
+          $sum: "$august",
+        },
+      },
+    },
+  ]);
   console.log(charts);
   console.log(charts.length);
   for (let socketMapObj of socketMap) {
