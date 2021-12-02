@@ -37,17 +37,19 @@ var socketMap = [];
 io.on("connection", (client) => {
   console.log("Connected", client);
   socketMap.push(client);
-  consumer.on("message", function (message) {
-    client.emit("request", message.value);
-    if (message.value != null) {
-      dataUpdate();
-    }
-  });
-
+ 
   client.on("disconnect", () => {
     console.log("Client disconnected");
   });
 });
+
+consumer.on("message", function (message) {
+  client.emit("request", message.value);
+  if (message.value != null) {
+    dataUpdate();
+  }
+});
+
 
 async function dataUpdate() {
   console.log("Socket Emmit");
