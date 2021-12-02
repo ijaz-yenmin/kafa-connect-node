@@ -37,10 +37,10 @@ var socketMap = [];
 io.on("connection", (client) => {
   console.log("Connected", client);
   socketMap.push(client);
- 
-  client.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
+
+  // client.on("disconnect", () => {
+  //   console.log("Client disconnected");
+  // });
 });
 
 consumer.on("message", function (message) {
@@ -49,7 +49,6 @@ consumer.on("message", function (message) {
     dataUpdate();
   }
 });
-
 
 async function dataUpdate() {
   console.log("Socket Emmit");
