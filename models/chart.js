@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var Chart = new Schema({
+var user = new Schema({
   january: {
     type: String,
   },
@@ -26,5 +26,5 @@ var Chart = new Schema({
     type: Number,
   },
 });
-var chart = mongoose.model("users", Chart);
-module.exports = chart;
+var user = mongoose.model("users", user);
+module.exports = user;

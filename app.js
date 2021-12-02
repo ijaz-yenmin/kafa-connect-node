@@ -7,7 +7,7 @@ options = {
 };
 const io = require("socket.io")(http, options);
 const mongoose = require("mongoose");
-var Charts = require("./models/chart");
+var users = require("./models/chart");
 var async = require("async");
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -55,7 +55,7 @@ io.on("connection", (client) => {
 
 async function dataUpdate() {
   console.log("Socket Emmit");
-  var charts = await Charts.find({});
+  var charts = await users.find({});
   for (let socketMapObj of socketMap) {
     if (charts.length > 0) {
       socketMapObj.emit("dataUpdate", [
