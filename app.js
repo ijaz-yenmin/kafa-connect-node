@@ -1,7 +1,7 @@
 const app = require("express")();
 var express = require("express");
 const http = require("http").createServer(app);
-options = {
+const options = {
   cors: true,
   origins: ["http://127.0.0.1:4200"],
 };
@@ -32,22 +32,16 @@ http.listen(3000, () => {
   console.log("listning to port 3000");
 });
 
-var socketMap = [];
-
 io.on("connection", (clt) => {
-  console.log("Connected", clt);
   socketMap.push(clt);
-
-  consumer.on("message", function (message) {
-    clt.emit("request", message.value);
-    if (message.value != null) {
-      dataUpdate();
-    }
-  });
-
   clt.on("disconnect", () => {
     console.log("Client disconnected");
   });
+});
+
+var socketMap = [];
+consumer.on("message", function (message) {
+  dataUpdate();
 });
 
 async function dataUpdate() {
