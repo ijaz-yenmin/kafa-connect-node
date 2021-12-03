@@ -34,24 +34,21 @@ http.listen(3000, () => {
 
 var socketMap = [];
 
-consumer.on("message", function (message) {
-  socketConnect();
-  client.emit("request", message.value);
-  if (message.value != null) {
-    dataUpdate();
-  }
-});
+io.on("connection", (client) => {
+  console.log("Connected", client);
+  socketMap.push(client);
 
-async function socketConnect() {
-  io.on("connection", (clt) => {
-    console.log("Connected", clt);
-    socketMap.push(clt);
-
-    clt.on("disconnect", () => {
-      console.log("Client disconnected");
-    });
+  consumer.on("message", function (message) {
+    client.emit("request", message.value);
+    if (message.value != null) {
+      dataUpdate();
+    }
   });
-}
+
+  client.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 async function dataUpdate() {
   console.log("Socket Emmit");
