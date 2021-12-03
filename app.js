@@ -78,7 +78,7 @@ async function dataUpdate() {
   console.log(charts.length);
   for (let socketMapObj of socketMap) {
     if (charts.length > 0) {
-      socketMapObj.emit("dataUpdate", [
+      io.sockets.emit("dataUpdate", [
         charts[0].january,
         charts[0].february,
         charts[0].march,
