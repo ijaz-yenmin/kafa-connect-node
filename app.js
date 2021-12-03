@@ -34,18 +34,18 @@ http.listen(3000, () => {
 
 var socketMap = [];
 
-io.on("connection", (client) => {
-  console.log("Connected", client);
-  socketMap.push(client);
+io.on("connection", (clt) => {
+  console.log("Connected", clt);
+  socketMap.push(clt);
 
   consumer.on("message", function (message) {
-    client.emit("request", message.value);
+    clt.emit("request", message.value);
     if (message.value != null) {
       dataUpdate();
     }
   });
 
-  client.on("disconnect", () => {
+  clt.on("disconnect", () => {
     console.log("Client disconnected");
   });
 });
