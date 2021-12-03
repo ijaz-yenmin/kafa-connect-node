@@ -20,13 +20,9 @@ mongoose.connect("mongodb://34.93.71.234:27017/testdb?replicaSet=rs0", {
 var kafka = require("kafka-node");
 var Consumer = kafka.Consumer,
   client = new kafka.KafkaClient("localhost:9092"),
-  consumer = new Consumer(
-    client,
-    [{ topic: "mongo1.testdb.users", partition: 0 }],
-    {
-      autoCommit: true,
-    }
-  );
+  consumer = new Consumer(client, [{ topic: "test", partition: 0 }], {
+    autoCommit: true,
+  });
 
 http.listen(3000, () => {
   console.log("listning to port 3000");
@@ -34,9 +30,6 @@ http.listen(3000, () => {
 
 io.on("connection", (clt) => {
   socketMap.push(clt);
-  clt.on("disconnect", () => {
-    console.log("Client disconnected");
-  });
 });
 
 var socketMap = [];
