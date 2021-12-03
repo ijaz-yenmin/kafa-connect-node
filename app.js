@@ -3,7 +3,7 @@ var express = require("express");
 const http = require("http").createServer(app);
 const options = {
   cors: true,
-  origins: ["http://127.0.0.1:4200"],
+  origins: ["34.93.71.234:4200"],
 };
 var io = require("socket.io")(http, options);
 const mongoose = require("mongoose");
