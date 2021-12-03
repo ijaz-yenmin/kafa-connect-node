@@ -5,7 +5,7 @@ const options = {
   cors: true,
   origins: ["http://127.0.0.1:4200"],
 };
-const io = require("socket.io")(http, options);
+var io = require("socket.io")(http, options);
 const mongoose = require("mongoose");
 var users = require("./models/chart");
 var async = require("async");
@@ -32,8 +32,8 @@ http.listen(3000, () => {
   console.log("listning to port 3000");
 });
 
-io.on("connection", (clt) => {
-  socketMap.push(clt);
+io.on("connection", (socket) => {
+  socketMap.push(socket);
 });
 
 var socketMap = [];
