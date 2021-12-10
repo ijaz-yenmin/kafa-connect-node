@@ -6,6 +6,7 @@ const options = {
   origins: ["http://127.0.0.1:4200"],
 };
 var io = require("socket.io")(http, options);
+const axios = require("axios").default;
 const mongoose = require("mongoose");
 var users = require("./models/chart");
 var async = require("async");
