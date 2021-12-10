@@ -28,9 +28,9 @@ http.listen(3000, () => {
   console.log("listning to port 3000");
 });
 
-io.on("connection", (socket) => {
-  socketMap.push(socket);
-});
+// io.on("connection", (socket) => {
+//   socketMap.push(socket);
+// });
 
 var socketMap = [];
 consumer.on("message", function (message) {
