@@ -7,8 +7,8 @@ const options = {
 };
 var io = require("socket.io")(http, options);
 const axios = require("axios").default;
-const mongoose = require("mongoose");
-var users = require("./models/chart");
+// const mongoose = require("mongoose");
+// var users = require("./models/chart");
 var async = require("async");
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -58,53 +58,53 @@ const sendGetRequest = async () => {
 
 sendGetRequest();
 
-async function dataUpdate() {
-  console.log("Socket Emmit");
-  var charts = await users.aggregate([
-    {
-      $group: {
-        _id: "null",
-        january: {
-          $sum: "$january",
-        },
-        february: {
-          $sum: "$february",
-        },
-        march: {
-          $sum: "$march",
-        },
-        april: {
-          $sum: "$april",
-        },
-        may: {
-          $sum: "$may",
-        },
-        june: {
-          $sum: "$june",
-        },
-        july: {
-          $sum: "$july",
-        },
-        august: {
-          $sum: "$august",
-        },
-      },
-    },
-  ]);
-  console.log(charts);
-  console.log(charts.length);
-  for (let socketMapObj of socketMap) {
-    if (charts.length > 0) {
-      io.sockets.emit("dataUpdate", [
-        charts[0].january,
-        charts[0].february,
-        charts[0].march,
-        charts[0].april,
-        charts[0].may,
-        charts[0].june,
-        charts[0].july,
-        charts[0].august,
-      ]);
-    }
-  }
-}
+// async function dataUpdate() {
+//   console.log("Socket Emmit");
+//   var charts = await users.aggregate([
+//     {
+//       $group: {
+//         _id: "null",
+//         january: {
+//           $sum: "$january",
+//         },
+//         february: {
+//           $sum: "$february",
+//         },
+//         march: {
+//           $sum: "$march",
+//         },
+//         april: {
+//           $sum: "$april",
+//         },
+//         may: {
+//           $sum: "$may",
+//         },
+//         june: {
+//           $sum: "$june",
+//         },
+//         july: {
+//           $sum: "$july",
+//         },
+//         august: {
+//           $sum: "$august",
+//         },
+//       },
+//     },
+//   ]);
+//   console.log(charts);
+//   console.log(charts.length);
+//   for (let socketMapObj of socketMap) {
+//     if (charts.length > 0) {
+//       io.sockets.emit("dataUpdate", [
+//         charts[0].january,
+//         charts[0].february,
+//         charts[0].march,
+//         charts[0].april,
+//         charts[0].may,
+//         charts[0].june,
+//         charts[0].july,
+//         charts[0].august,
+//       ]);
+//     }
+//   }
+// }
