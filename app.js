@@ -35,19 +35,17 @@ http.listen(3000, () => {
 
 var socketMap = [];
 consumer.on("message", function (message) {
+  console.log("trigger kafka");
   sendGetRequest();
 });
 
 const sendGetRequest = async () => {
   try {
-    const resp = await axios.get(
-      "http://34.93.111.74:8080/aw-watcher-timeline",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46c2VjcmV0",
-        },
-      }
-    );
+    const resp = await axios.get("http://34.93.111.74:8080/users", {
+      headers: {
+        authorization: "Basic YWRtaW46c2VjcmV0",
+      },
+    });
 
     console.log(resp.data);
   } catch (err) {
