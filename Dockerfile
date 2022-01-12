@@ -1,15 +1,19 @@
-FROM node:latest
+FROM node:10
 
-RUN mkdir /app
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/app
 
-ENV PATH /app/node_modules/.bin:$PATH
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
-COPY package.json package-lock.json /app/
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-# Or if you're using Yarn
-# ADD package.json yarn.lock /app/
-# RUN yarn install
+# Bundle app source
+COPY . .
 
-COPY . /app/
+EXPOSE 3000
+CMD [ "node", "app.js" ]
