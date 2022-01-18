@@ -26,11 +26,19 @@ var Consumer = kafka.Consumer,
   ),
   timelineConsumer = new Consumer(
     client,
-    [{ topic: "proton_server.proton_dev.users", partition: 0 }],
+    [{ topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 }],
     {
       autoCommit: true,
     }
   );
+
+afkConsumer = new Consumer(
+  client,
+  [{ topic: "proton_server.proton_dev.aw-watcher-afk", partition: 0 }],
+  {
+    autoCommit: true,
+  }
+);
 
 http.listen(3000, () => {
   console.log("listning to port 3000");
@@ -57,7 +65,7 @@ var lastDate =
 
 usersConsumer.on("message", function (message) {
   console.log("trigger kafka");
-  io.sockets.emit("get-activitiesUserId", { value: true });
+  // io.sockets.emit("get-activitiesUserId", { value: true });
   afkApp();
   activityApp();
   topPerformer();
@@ -73,10 +81,35 @@ usersConsumer.on("message", function (message) {
   }
 });
 
+afkConsumer.on("message", function (message) {
+  console.log("trigger kafka");
+  // io.sockets.emit("get-activitiesUserId", { value: true });
+  afkApp();
+  if (activiesUserId != null) {
+    afkAppById();
+  }
+});
+
+timelineConsumer.on("message", function (message) {
+  console.log("trigger kafka");
+  // io.sockets.emit("get-activitiesUserId", { value: true });
+  activityApp();
+  topPerformer();
+  setTimeout(function () {
+    mostUsedAPP();
+  }, 200);
+  if (activiesUserId != null) {
+    activityAppByUserId();
+    setTimeout(function () {
+      mostUsedAPPById();
+    }, 200);
+  }
+});
+
 const activityApp = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-timeline/_aggrs/activities?avars={'start':'" +
+      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities?avars={'start':'" +
         startDate +
         "','end':'" +
         lastDate +
@@ -99,7 +132,7 @@ const activityApp = async () => {
 const activityAppByUserId = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-timeline/_aggrs/activities-for-activities?avars={'id':'" +
+      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities-for-activities?avars={'id':'" +
         activiesUserId +
         "','start':'" +
         startDate +
@@ -124,7 +157,7 @@ const activityAppByUserId = async () => {
 const mostUsedAPP = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-timeline/_aggrs/most-used-apps?avars={'start':'" +
+      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps?avars={'start':'" +
         startDate +
         "','end':'" +
         lastDate +
@@ -147,7 +180,7 @@ const mostUsedAPP = async () => {
 const mostUsedAPPById = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-timeline/_aggrs/most-used-apps-activities?avars={'id':'" +
+      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps-activities?avars={'id':'" +
         activiesUserId +
         "','start':'" +
         startDate +
@@ -172,7 +205,7 @@ const mostUsedAPPById = async () => {
 const afkApp = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-afk/_aggrs/afk?avars={'start':'" +
+      "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk?avars={'start':'" +
         startDate +
         "','end':'" +
         lastDate +
@@ -198,7 +231,7 @@ const afkApp = async () => {
 const afkAppById = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/aw-watcher-afk/_aggrs/afk-activities?avars={'id':'" +
+      "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk-activities?avars={'id':'" +
         activiesUserId +
         "','start':'" +
         startDate +
@@ -222,7 +255,7 @@ const afkAppById = async () => {
 const topPerformer = async () => {
   try {
     const resp = await axios.get(
-      "http://35.244.58.172:8080/users/_aggrs/topPerformer?avars={'start':'" +
+      "http://34.93.191.136:8080/users/_aggrs/topPerformer?avars={'start':'" +
         startDate +
         "','end':'" +
         lastDate +
