@@ -70,7 +70,6 @@ usersConsumer.on("message", function (message) {
     var record = JSON.parse(data.payload.after);
     console.log(record);
   }
-  console.log(data);
   // io.sockets.emit("get-activitiesUserId", { value: true });
   afkApp();
   activityApp();
