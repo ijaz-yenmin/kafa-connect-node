@@ -127,7 +127,7 @@ const activityApp = async () => {
     );
     io.sockets.emit("activies-app", resp.data);
 
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -152,7 +152,7 @@ const activityAppByUserId = async () => {
     );
     io.sockets.emit("activites-active-widget", resp.data);
 
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -175,7 +175,7 @@ const mostUsedAPP = async () => {
     );
     io.sockets.emit("most-used-app", resp.data);
 
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -200,7 +200,7 @@ const mostUsedAPPById = async () => {
     );
     io.sockets.emit("activities-most-used-app", resp.data);
 
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -222,7 +222,7 @@ const afkApp = async () => {
       }
     );
     io.sockets.emit("dashboard-afk-app", resp.data);
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -250,7 +250,7 @@ const afkAppById = async () => {
       }
     );
     io.sockets.emit("activities-afk-app", resp.data);
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
@@ -273,7 +273,7 @@ const topPerformer = async () => {
     );
     io.sockets.emit("top-perform-app", resp.data);
 
-    console.log(resp.data);
+    // console.log(resp.data);
   } catch (err) {
     // Handle Error Here
     console.error(err);
