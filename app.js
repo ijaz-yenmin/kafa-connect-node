@@ -65,7 +65,10 @@ var lastDate =
 
 usersConsumer.on("message", function (message) {
   console.log("trigger kafka");
-  var data = JSON.parse(message.value);
+  if (message.value != null) {
+    var data = JSON.parse(message.value);
+    console.log(data.payload.after);
+  }
   console.log(data);
   // io.sockets.emit("get-activitiesUserId", { value: true });
   afkApp();
