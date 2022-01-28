@@ -67,7 +67,8 @@ usersConsumer.on("message", function (message) {
   console.log("trigger kafka");
   if (message.value != null) {
     var data = JSON.parse(message.value);
-    console.log(data.payload.after);
+    var record = JSON.parse(data.payload.after);
+    console.log(record);
   }
   console.log(data);
   // io.sockets.emit("get-activitiesUserId", { value: true });
