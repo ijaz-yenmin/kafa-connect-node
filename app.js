@@ -71,13 +71,11 @@ usersConsumer.on("message", function (message) {
     if (record != null) {
       console.log(record);
       console.log(record.orgID);
+      io.sockets.emit("most-used-app", record.orgID);
       io.sockets.emit("overview-dashboard", record.orgID);
       io.sockets.emit("activies-app", record.orgID);
       io.sockets.emit("dashboard-afk-app", record.orgID);
       io.sockets.emit("top-perform-app", record.orgID);
-      setTimeout(function () {
-        io.sockets.emit("most-used-app", record.orgID);
-      }, 300);
     }
   }
 });
