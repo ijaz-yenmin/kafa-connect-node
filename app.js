@@ -75,7 +75,9 @@ usersConsumer.on("message", function (message) {
       io.sockets.emit("activies-app", record.orgID);
       io.sockets.emit("dashboard-afk-app", record.orgID);
       io.sockets.emit("top-perform-app", record.orgID);
-      io.sockets.emit("most-used-app", record.orgID);
+      setTimeout(function () {
+        io.sockets.emit("most-used-app", record.orgID);
+      }, 300);
     }
   }
 });
