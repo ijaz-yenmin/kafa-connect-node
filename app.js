@@ -69,6 +69,9 @@ usersConsumer.on("message", function (message) {
     var data = JSON.parse(message.value);
     var record = JSON.parse(data.payload.after);
     console.log(record);
+    console.log(record.orgID);
+
+    io.sockets.emit("overview-dashboard", record.orgID);
   }
 });
 
