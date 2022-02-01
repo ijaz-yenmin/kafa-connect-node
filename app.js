@@ -68,8 +68,10 @@ usersConsumer.on("message", function (message) {
   if (message.value != null) {
     var data = JSON.parse(message.value);
     var record = JSON.parse(data.payload.after);
-    console.log(record);
-    console.log(record.orgID);
+    if (record != null) {
+      console.log(record);
+      console.log(record.orgID);
+    }
 
     io.sockets.emit("overview-dashboard", record.orgID);
   }
