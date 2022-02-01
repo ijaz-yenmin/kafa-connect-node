@@ -72,6 +72,7 @@ usersConsumer.on("message", function (message) {
       console.log(record);
       console.log(record.orgID);
       io.sockets.emit("overview-dashboard", record.orgID);
+      io.sockets.emit("activies-app", record.orgID);
       io.sockets.emit("dashboard-afk-app", record.orgID);
     }
   }
