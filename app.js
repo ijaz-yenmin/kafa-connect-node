@@ -71,19 +71,19 @@ usersConsumer.on("message", function (message) {
     console.log(record);
   }
   // io.sockets.emit("get-activitiesUserId", { value: true });
-  // afkApp();
-  // activityApp();
-  // topPerformer();
-  // setTimeout(function () {
-  //   mostUsedAPP();
-  // }, 200);
-  // if (activiesUserId != null) {
-  //   afkAppById();
-  //   activityAppByUserId();
-  //   setTimeout(function () {
-  //     mostUsedAPPById();
-  //   }, 200);
-  // }
+  afkApp();
+  activityApp();
+  topPerformer();
+  setTimeout(function () {
+    mostUsedAPP();
+  }, 200);
+  if (activiesUserId != null) {
+    afkAppById();
+    activityAppByUserId();
+    setTimeout(function () {
+      mostUsedAPPById();
+    }, 200);
+  }
 });
 
 afkConsumer.on("message", function (message) {
