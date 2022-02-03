@@ -17,30 +17,16 @@ app.use(express.json());
 var kafka = require("kafka-node");
 var Consumer = kafka.Consumer,
   client = new kafka.KafkaClient("34.93.87.163:9092"),
-  usersConsumer = new Consumer(
+  consumer = new Consumer(
     client,
-    [{ topic: "proton_server.proton_dev.users", partition: 0 }],
+    [
+      { topic: "proton_server.proton_dev.users", partition: 0 },
+      { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
+    ],
     {
-      groupId: "group1",
-      autoCommit: true,
-    }
-  ),
-  timelineConsumer = new Consumer(
-    client,
-    [{ topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 }],
-    {
-      groupId: "group2",
       autoCommit: true,
     }
   );
-
-afkConsumer = new Consumer(
-  client,
-  [{ topic: "proton_server.proton_dev.aw-watcher-afk", partition: 0 }],
-  {
-    autoCommit: false,
-  }
-);
 
 http.listen(3000, () => {
   console.log("listning to port 3000");
@@ -65,34 +51,8 @@ var lastDate =
   dtLocal.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
   "T00:00:00Z";
 
-usersConsumer.on("message", function (message) {
+consumer.on("message", function (message) {
   console.log("trigger kafka");
-  if (message.value != null) {
-    var data = JSON.parse(message.value);
-    var record = JSON.parse(data.payload.after);
-    if (record != null) {
-      console.log(record);
-      console.log(record.orgID);
-      io.sockets.emit("most-used-app", record.orgID);
-      io.sockets.emit("overview-dashboard", record.orgID);
-      io.sockets.emit("activies-app", record.orgID);
-      io.sockets.emit("dashboard-afk-app", record.orgID);
-      io.sockets.emit("top-perform-app", record.orgID);
-    }
-  }
-});
-
-afkConsumer.on("message", function (message) {
-  console.log("trigger kafka");
-  // io.sockets.emit("get-activitiesUserId", { value: true });
-  afkApp();
-  if (activiesUserId != null) {
-    afkAppById();
-  }
-});
-
-timelineConsumer.on("message", function (message) {
-  console.log("trigger timeline");
   if (message.value != null) {
     var data = JSON.parse(message.value);
     var record = JSON.parse(data.payload.after);
