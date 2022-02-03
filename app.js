@@ -21,6 +21,7 @@ var Consumer = kafka.Consumer,
     client,
     [{ topic: "proton_server.proton_dev.users", partition: 0 }],
     {
+      groupId: "group1",
       autoCommit: true,
     }
   ),
@@ -28,6 +29,7 @@ var Consumer = kafka.Consumer,
     client,
     [{ topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 }],
     {
+      groupId: "group2",
       autoCommit: true,
     }
   );
