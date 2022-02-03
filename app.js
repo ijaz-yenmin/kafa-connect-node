@@ -28,7 +28,7 @@ var Consumer = kafka.Consumer,
     client,
     [{ topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 }],
     {
-      autoCommit: false,
+      autoCommit: true,
     }
   );
 
