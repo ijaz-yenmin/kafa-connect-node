@@ -90,18 +90,19 @@ afkConsumer.on("message", function (message) {
 });
 
 timelineConsumer.on("message", function (message) {
-  console.log("trigger kafka");
-  // io.sockets.emit("get-activitiesUserId", { value: true });
-  activityApp();
-  topPerformer();
-  setTimeout(function () {
-    mostUsedAPP();
-  }, 200);
-  if (activiesUserId != null) {
-    activityAppByUserId();
-    setTimeout(function () {
-      mostUsedAPPById();
-    }, 200);
+  console.log("trigger timeline");
+  if (message.value != null) {
+    var data = JSON.parse(message.value);
+    var record = JSON.parse(data.payload.after);
+    if (record != null) {
+      console.log(record);
+      console.log(record.orgID);
+      io.sockets.emit("most-used-app", record.orgID);
+      io.sockets.emit("overview-dashboard", record.orgID);
+      io.sockets.emit("activies-app", record.orgID);
+      io.sockets.emit("dashboard-afk-app", record.orgID);
+      io.sockets.emit("top-perform-app", record.orgID);
+    }
   }
 });
 
