@@ -57,8 +57,13 @@ consumer.on("message", function (message) {
     var data = JSON.parse(message.value);
     var record = JSON.parse(data.payload.after);
     if (record != null) {
-      console.log(record);
-      console.log(record.orgID);
+      // console.log(record);
+      // console.log(record.orgID);
+      var data = {
+        orgId: record.orgID.oid,
+        userId: record.uId.oid,
+      };
+      console.log(data);
       io.sockets.emit("most-used-app", record.orgID);
       io.sockets.emit("overview-dashboard", record.orgID);
       io.sockets.emit("activies-app", record.orgID);
@@ -68,171 +73,171 @@ consumer.on("message", function (message) {
   }
 });
 
-const activityApp = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities?avars={'start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("activies-app", resp.data);
+// const activityApp = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities?avars={'start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("activies-app", resp.data);
 
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-const activityAppByUserId = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities-for-activities?avars={'id':'" +
-        activiesUserId +
-        "','start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("activites-active-widget", resp.data);
+// const activityAppByUserId = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities-for-activities?avars={'id':'" +
+//         activiesUserId +
+//         "','start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("activites-active-widget", resp.data);
 
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-const mostUsedAPP = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps?avars={'start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("most-used-app", resp.data);
+// const mostUsedAPP = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps?avars={'start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("most-used-app", resp.data);
 
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-const mostUsedAPPById = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps-activities?avars={'id':'" +
-        activiesUserId +
-        "','start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("activities-most-used-app", resp.data);
+// const mostUsedAPPById = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps-activities?avars={'id':'" +
+//         activiesUserId +
+//         "','start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("activities-most-used-app", resp.data);
 
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-const afkApp = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk?avars={'start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("dashboard-afk-app", resp.data);
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+// const afkApp = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk?avars={'start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("dashboard-afk-app", resp.data);
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-//
-//
-// firstTreeNode
+// //
+// //
+// // firstTreeNode
 
-const afkAppById = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk-activities?avars={'id':'" +
-        activiesUserId +
-        "','start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("activities-afk-app", resp.data);
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+// const afkAppById = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk-activities?avars={'id':'" +
+//         activiesUserId +
+//         "','start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("activities-afk-app", resp.data);
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
 
-const topPerformer = async () => {
-  try {
-    const resp = await axios.get(
-      "http://34.93.191.136:8080/users/_aggrs/topPerformer?avars={'start':'" +
-        startDate +
-        "','end':'" +
-        lastDate +
-        "'}",
-      {
-        headers: {
-          authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-        },
-      }
-    );
-    io.sockets.emit("top-perform-app", resp.data);
+// const topPerformer = async () => {
+//   try {
+//     const resp = await axios.get(
+//       "http://34.93.191.136:8080/users/_aggrs/topPerformer?avars={'start':'" +
+//         startDate +
+//         "','end':'" +
+//         lastDate +
+//         "'}",
+//       {
+//         headers: {
+//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
+//         },
+//       }
+//     );
+//     io.sockets.emit("top-perform-app", resp.data);
 
-    // console.log(resp.data);
-  } catch (err) {
-    // Handle Error Here
-    console.error(err);
-  }
-};
+//     // console.log(resp.data);
+//   } catch (err) {
+//     // Handle Error Here
+//     console.error(err);
+//   }
+// };
