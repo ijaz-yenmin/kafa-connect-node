@@ -60,8 +60,8 @@ consumer.on("message", function (message) {
       // console.log(record);
       // console.log(record.orgID);
       var data = {
-        orgId: record.orgID.oid,
-        userId: record.uId.oid,
+        orgId: record.orgID,
+        userId: record.uId,
       };
       console.log(data);
       io.sockets.emit("most-used-app", record.orgID);
