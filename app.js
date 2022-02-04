@@ -61,7 +61,7 @@ consumer.on("message", function (message) {
       // console.log(record.orgID);
       var data = {
         orgId: record.orgID,
-        userId: record.uId,
+        userId: record.uid,
       };
       console.log(data);
       io.sockets.emit("most-used-app", record.orgID);
