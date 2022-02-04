@@ -57,18 +57,16 @@ consumer.on("message", function (message) {
     var data = JSON.parse(message.value);
     var record = JSON.parse(data.payload.after);
     if (record != null) {
-      // console.log(record);
-      // console.log(record.orgID);
       var data = {
         orgId: record.orgID,
         userId: record.uid,
       };
       console.log(data);
-      io.sockets.emit("most-used-app", record.orgID);
-      io.sockets.emit("overview-dashboard", record.orgID);
-      io.sockets.emit("activies-app", record.orgID);
-      io.sockets.emit("dashboard-afk-app", record.orgID);
-      io.sockets.emit("top-perform-app", record.orgID);
+      io.sockets.emit("most-used-app", data);
+      io.sockets.emit("overview-dashboard", data);
+      io.sockets.emit("activies-app", data);
+      io.sockets.emit("dashboard-afk-app", data);
+      io.sockets.emit("top-perform-app", data);
     }
   }
 });
