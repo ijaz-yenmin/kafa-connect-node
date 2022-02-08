@@ -67,6 +67,8 @@ consumer.on("message", function (message) {
       io.sockets.emit("activies-app", data);
       io.sockets.emit("dashboard-afk-app", data);
       io.sockets.emit("top-perform-app", data);
+      io.sockets.emit("user-count", data);
+      io.sockets.emit("user-activity", data);
     }
   }
 });
