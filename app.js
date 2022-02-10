@@ -1,11 +1,11 @@
 const app = require("express")();
 var express = require("express");
 const http = require("http").createServer(app);
-const option = {
+const options = {
   cors: true,
   origins: ["http://127.0.0.1:4200"],
 };
-var io = require("socket.io")(http, option);
+var io = require("socket.io")(http, options);
 const axios = require("axios").default;
 // const mongoose = require("mongoose");
 // var users = require("./models/chart");
@@ -14,12 +14,9 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.json());
 
-options = {
-  kafkaHost: "kafka:9092",
-};
 var kafka = require("kafka-node");
 var Consumer = kafka.Consumer,
-  client = new kafka.KafkaClient(options),
+  client = new kafka.KafkaClient("34.93.87.163:9092"),
   consumer = new Consumer(
     client,
     [
