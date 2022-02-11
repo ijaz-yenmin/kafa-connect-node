@@ -13,81 +13,68 @@ var async = require("async");
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.json());
+try {
+  var kafka = require("kafka-node");
+  var Consumer = kafka.Consumer,
+    client = new kafka.KafkaClient("34.93.87.163:9092"),
+    consumer = new Consumer(
+      client,
+      [
+        // { topic: "proton_server.proton_dev.users", partition: 0 },
+        { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
+      ],
+      {
+        autoCommit: true,
+      }
+    );
 
-var kafka = require("kafka-node");
-var Consumer = kafka.Consumer;
-var Offset = kafka.Offset;
-var Client = kafka.KafkaClient;
-var client = new Client({ kafkaHost: "34.93.87.163:9092" });
-var topics = [
-  { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
-];
-var option = {
-  autoCommit: false,
-  fetchMaxWaitMs: 1000,
-  fetchMaxBytes: 1024 * 1024,
-};
-
-var consumer = new Consumer(client, topics, option);
-var offset = new Offset(client);
-// var Consumer = kafka.Consumer,
-//   client = new kafka.KafkaClient("34.93.87.163:9092"),
-//   consumer = new Consumer(
-//     client,
-//     [
-//       { topic: "proton_server.proton_dev.users", partition: 0 },
-//       { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
-//     ],
-//     {
-//       autoCommit: true,
-//     }
-//   );
-
-http.listen(3000, () => {
-  console.log("listning to port 3000");
-});
-var socketMap = [];
-var activiesUserId = null;
-io.on("connection", (socket) => {
-  socketMap.push(socket);
-
-  socket.on("test", (val) => {
-    console.log(val);
-    activiesUserId = val;
+  http.listen(3000, () => {
+    console.log("listning to port 3000");
   });
-});
+  var socketMap = [];
+  var activiesUserId = null;
+  io.on("connection", (socket) => {
+    socketMap.push(socket);
 
-let dtLocal = new Date();
-var last = new Date(dtLocal.getTime() - 7 * 24 * 60 * 60 * 1000);
-var startDate =
-  last.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
-  "T00:00:00Z";
-var lastDate =
-  dtLocal.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
-  "T00:00:00Z";
+    socket.on("test", (val) => {
+      console.log(val);
+      activiesUserId = val;
+    });
+  });
 
-consumer.on("message", function (message) {
-  console.log("trigger kafka");
-  if (message.value != null) {
-    var data = JSON.parse(message.value);
-    var record = JSON.parse(data.payload.after);
-    if (record != null) {
-      var data = {
-        orgId: record.orgID,
-        userId: record.uid,
-      };
-      console.log(data);
-      io.sockets.emit("most-used-app", data);
-      io.sockets.emit("overview-dashboard", data);
-      io.sockets.emit("activies-app", data);
-      io.sockets.emit("dashboard-afk-app", data);
-      io.sockets.emit("top-perform-app", data);
-      io.sockets.emit("user-count", data);
-      io.sockets.emit("user-activity", data);
+  let dtLocal = new Date();
+  var last = new Date(dtLocal.getTime() - 7 * 24 * 60 * 60 * 1000);
+  var startDate =
+    last.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
+    "T00:00:00Z";
+  var lastDate =
+    dtLocal.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
+    "T00:00:00Z";
+
+  consumer.on("message", function (message) {
+    console.log("trigger kafka");
+    if (message.value != null) {
+      var data = JSON.parse(message.value);
+      var record = JSON.parse(data.payload.after);
+      if (record != null) {
+        var data = {
+          orgId: record.orgID,
+          userId: record.uid,
+        };
+        console.log(data);
+        io.sockets.emit("most-used-app", data);
+        io.sockets.emit("overview-dashboard", data);
+        io.sockets.emit("activies-app", data);
+        io.sockets.emit("dashboard-afk-app", data);
+        io.sockets.emit("top-perform-app", data);
+        io.sockets.emit("user-count", data);
+        io.sockets.emit("user-activity", data);
+      }
     }
-  }
-});
-
+  });
+} catch (e) {
+  console.log(e);
+}
 // const activityApp = async () => {
 //   try {
 //     const resp = await axios.get(
