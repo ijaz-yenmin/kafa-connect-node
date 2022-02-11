@@ -15,18 +15,33 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 var kafka = require("kafka-node");
-var Consumer = kafka.Consumer,
-  client = new kafka.KafkaClient("34.93.87.163:9092"),
-  consumer = new Consumer(
-    client,
-    [
-      { topic: "proton_server.proton_dev.users", partition: 0 },
-      { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
-    ],
-    {
-      autoCommit: true,
-    }
-  );
+var Consumer = kafka.Consumer;
+var Offset = kafka.Offset;
+var Client = kafka.KafkaClient;
+var client = new Client({ kafkaHost: "34.93.87.163:9092" });
+var topics = [
+  { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
+];
+var option = {
+  autoCommit: false,
+  fetchMaxWaitMs: 1000,
+  fetchMaxBytes: 1024 * 1024,
+};
+
+var consumer = new Consumer(client, topics, option);
+var offset = new Offset(client);
+// var Consumer = kafka.Consumer,
+//   client = new kafka.KafkaClient("34.93.87.163:9092"),
+//   consumer = new Consumer(
+//     client,
+//     [
+//       { topic: "proton_server.proton_dev.users", partition: 0 },
+//       { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
+//     ],
+//     {
+//       autoCommit: true,
+//     }
+//   );
 
 http.listen(3000, () => {
   console.log("listning to port 3000");
