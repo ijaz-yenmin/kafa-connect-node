@@ -16,7 +16,7 @@ app.use(express.json());
 try {
   var kafka = require("kafka-node");
   var Consumer = kafka.Consumer,
-    client = new kafka.KafkaClient("localhost:19092"),
+    client = new kafka.KafkaClient("34.93.87.163:19092"),
     consumer = new Consumer(
       client,
       [
