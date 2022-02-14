@@ -3,7 +3,7 @@ services:
   web:
     image: web
     build:
-      context: ./kafa-connect-node
+      context: .
       dockerfile: Dockerfile
     container_name: web
     volumes:
