@@ -21,7 +21,7 @@ try {
       client,
       [
         // { topic: "proton_server.proton_dev.users", partition: 0 },
-        { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
+        { topic: "proton_server.proton_dev.users", partition: 0 },
       ],
       {
         autoCommit: true,
