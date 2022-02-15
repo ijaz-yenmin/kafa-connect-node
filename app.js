@@ -21,7 +21,7 @@ try {
       client,
       [
         // { topic: "proton_server.proton_dev.users", partition: 0 },
-        { topic: "proton_server.proton_dev.users", partition: 0 },
+        { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
       ],
       {
         autoCommit: true,
@@ -64,6 +64,7 @@ try {
         console.log(data);
         io.sockets.emit("most-used-app", data);
         io.sockets.emit("overview-dashboard", data);
+        io.sockets.emit("overview-activities", data);
         io.sockets.emit("activies-app", data);
         io.sockets.emit("dashboard-afk-app", data);
         io.sockets.emit("top-perform-app", data);
