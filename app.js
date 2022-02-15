@@ -65,6 +65,7 @@ try {
         io.sockets.emit("most-used-app", data);
         io.sockets.emit("overview-dashboard", data);
         io.sockets.emit("overview-activities", data);
+        io.sockets.emit("youtube-activities", data);
         io.sockets.emit("activies-app", data);
         io.sockets.emit("dashboard-afk-app", data);
         io.sockets.emit("top-perform-app", data);
