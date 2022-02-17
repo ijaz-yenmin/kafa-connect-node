@@ -7,8 +7,6 @@ const options = {
 };
 var io = require("socket.io")(http, options);
 const axios = require("axios").default;
-// const mongoose = require("mongoose");
-// var users = require("./models/chart");
 var async = require("async");
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -16,7 +14,9 @@ app.use(express.json());
 try {
   var kafka = require("kafka-node");
   var Consumer = kafka.Consumer,
-    client = new kafka.KafkaClient("127.0.0.1:9092"),
+    client = new kafka.KafkaClient({
+      kafkaHost: "34.93.87.163:9092",
+    }),
     consumer = new Consumer(
       client,
       [
@@ -25,6 +25,7 @@ try {
       ],
       {
         autoCommit: false,
+        sessionTimeout: 15000,
       }
     );
 
