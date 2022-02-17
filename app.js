@@ -13,21 +13,30 @@ app.use(bodyParser.json());
 app.use(express.json());
 try {
   var kafka = require("kafka-node");
-  var Consumer = kafka.Consumer,
-    client = new kafka.KafkaClient({
-      kafkaHost: "34.93.87.163:9092",
-    }),
-    consumer = new Consumer(
-      client,
-      [
-        // { topic: "proton_server.proton_dev.users", partition: 0 },
-        { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
-      ],
+  var Consumer = kafka.Consumer;
+  var client = new kafka.KafkaClient({
+    kafkaHost: "34.93.87.163:29092",
+  });
+  client.on("ready", function () {
+    console.log("client is ready");
+  });
+  consumer = new Consumer(
+    client,
+    [
+      // { topic: "proton_server.proton_dev.users", partition: 0 },
       {
-        autoCommit: false,
-        sessionTimeout: 15000,
-      }
-    );
+        topic: "proton_server.proton_dev.aw-watcher-timeline",
+        partition: 0,
+      },
+    ],
+    {
+      autoCommit: true,
+      fetchMaxWaitMs: 1000,
+      fetchMaxBytes: 1024 * 1024,
+      encoding: "utf8",
+      fromOffset: false,
+    }
+  );
 
   http.listen(3000, () => {
     console.log("listning to port 3000");
@@ -75,6 +84,10 @@ try {
         io.sockets.emit("user-activity", data);
       }
     }
+  });
+
+  consumer.on("error", function (err) {
+    console.log("error", err);
   });
 } catch (e) {
   console.log(e);
