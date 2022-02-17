@@ -16,7 +16,9 @@ app.use(express.json());
 try {
   var kafka = require("kafka-node");
   var Consumer = kafka.Consumer,
-    client = new kafka.KafkaClient({ kafkaHost: "34.93.87.163:9092" }),
+    client = new kafka.KafkaClient({
+      kafkaHost: "localhost:9092",
+    }),
     consumer = new Consumer(
       client,
       [
@@ -24,7 +26,7 @@ try {
         { topic: "proton_server.proton_dev.aw-watcher-timeline", partition: 0 },
       ],
       {
-        autoCommit: true,
+        autoCommit: false,
       }
     );
 
