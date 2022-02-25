@@ -82,6 +82,7 @@ try {
         io.sockets.emit("top-perform-app", data);
         io.sockets.emit("user-count", data);
         io.sockets.emit("user-activity", data);
+        io.sockets.emit("activies-overview-cc", data);
       }
     }
   });
