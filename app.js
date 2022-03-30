@@ -1,264 +1,34 @@
-const app = require("express")();
-var express = require("express");
-const http = require("http").createServer(app);
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
+
+// Connection URL
+const url =
+  "mongodb://protonroot:s65ds2d4asd23a5a6s5d4a@65.1.94.198:30001/?authSource=admin&replicaSet=rs0&retryWrites=true";
+
+// Database Name
+const dbName = "proton_dev";
 const options = {
-  cors: true,
-  origins: ["http://127.0.0.1:4200"],
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 75000,
+  keepAlive: true,
 };
-var io = require("socket.io")(http, options);
-const axios = require("axios").default;
-var async = require("async");
-var bodyParser = require("body-parser");
-app.use(bodyParser.json());
-app.use(express.json());
-try {
-  var kafka = require("kafka-node");
-  var Consumer = kafka.Consumer;
-  var client = new kafka.KafkaClient({
-    kafkaHost: "34.93.87.163:29092",
-  });
-  client.on("ready", function () {
-    console.log("client is ready");
-  });
-  consumer = new Consumer(
-    client,
-    [
-      // { topic: "proton_server.proton_dev.users", partition: 0 },
-      {
-        topic: "proton_server.proton_dev.aw-watcher-timeline",
-        partition: 0,
-      },
-    ],
-    {
-      autoCommit: true,
-      fetchMaxWaitMs: 1000,
-      fetchMaxBytes: 1024 * 1024,
-      encoding: "utf8",
-      fromOffset: false,
-    }
-  );
 
-  http.listen(3000, () => {
-    console.log("listning to port 3000");
-  });
-  var socketMap = [];
-  var activiesUserId = null;
-  io.on("connection", (socket) => {
-    socketMap.push(socket);
+// Use connect method to connect to the server
+MongoClient.connect(url, function (err, db) {
+  if (err) {
+    throw err;
+  }
 
-    socket.on("test", (val) => {
-      console.log(val);
-      activiesUserId = val;
+  console.log("Database connection successful");
+
+  var dbo = db.db("proton_dev");
+  var cursor = dbo
+    .collection("users")
+    .find()
+    .toArray(function (err, items) {
+      console.log(JSON.stringify(items));
+      // res.send(items);
     });
-  });
-
-  let dtLocal = new Date();
-  var last = new Date(dtLocal.getTime() - 7 * 24 * 60 * 60 * 1000);
-  var startDate =
-    last.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
-    "T00:00:00Z";
-  var lastDate =
-    dtLocal.toISOString().replace("T", " ").substr(0, 19).split(" ")[0] +
-    "T00:00:00Z";
-
-  consumer.on("message", function (message) {
-    console.log("trigger kafka");
-    if (message.value != null) {
-      var data = JSON.parse(message.value);
-      var record = JSON.parse(data.payload.after);
-      if (record != null) {
-        var data = {
-          orgId: record.orgID,
-          userId: record.uid,
-        };
-        console.log(data);
-        io.sockets.emit("most-used-app", data);
-        io.sockets.emit("overview-dashboard", data);
-        io.sockets.emit("overview-activities", data);
-        io.sockets.emit("youtube-activities", data);
-        io.sockets.emit("tree-activities", data);
-        io.sockets.emit("activies-app", data);
-        io.sockets.emit("dashboard-afk-app", data);
-        io.sockets.emit("top-perform-app", data);
-        io.sockets.emit("user-count", data);
-        io.sockets.emit("user-activity", data);
-        io.sockets.emit("activies-overview-cc", data);
-        io.sockets.emit("overall-productivity-cc", data);
-      }
-    }
-  });
-
-  consumer.on("error", function (err) {
-    console.log("error", err);
-  });
-} catch (e) {
-  console.log(e);
-}
-// const activityApp = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities?avars={'start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("activies-app", resp.data);
-
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// const activityAppByUserId = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/activities-for-activities?avars={'id':'" +
-//         activiesUserId +
-//         "','start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("activites-active-widget", resp.data);
-
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// const mostUsedAPP = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps?avars={'start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("most-used-app", resp.data);
-
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// const mostUsedAPPById = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-timeline/_aggrs/most-used-apps-activities?avars={'id':'" +
-//         activiesUserId +
-//         "','start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("activities-most-used-app", resp.data);
-
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// const afkApp = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk?avars={'start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("dashboard-afk-app", resp.data);
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// //
-// //
-// // firstTreeNode
-
-// const afkAppById = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/aw-watcher-afk/_aggrs/afk-activities?avars={'id':'" +
-//         activiesUserId +
-//         "','start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("activities-afk-app", resp.data);
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
-
-// const topPerformer = async () => {
-//   try {
-//     const resp = await axios.get(
-//       "http://34.93.191.136:8080/users/_aggrs/topPerformer?avars={'start':'" +
-//         startDate +
-//         "','end':'" +
-//         lastDate +
-//         "'}",
-//       {
-//         headers: {
-//           authorization: "Basic YWRtaW46cHJ0bnlubW4=",
-//         },
-//       }
-//     );
-//     io.sockets.emit("top-perform-app", resp.data);
-
-//     // console.log(resp.data);
-//   } catch (err) {
-//     // Handle Error Here
-//     console.error(err);
-//   }
-// };
+  db.close();
+});
